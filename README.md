@@ -1,4 +1,4 @@
-<img src="Pics/Path Planning Pic.png" align="center" width="700"/>
+<img src="https://github.com/behroozmrd47/CS-5355-Path-Planning-Algorithms/blob/master/Path%20Planning%20Pic.png" align="center" width="700"/>
 
 
 # Robotics Systems Science, Path Planing Algorithms
