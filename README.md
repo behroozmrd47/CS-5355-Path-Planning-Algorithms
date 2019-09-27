@@ -14,13 +14,13 @@ This project aims to study the performance of four path planning and obstacle av
 The ["PythonRobotics"](https://github.com/AtsushiSakai/PythonRobotics) project from - [AtsushiSakai](https://github.com/AtsushiSakai/) ([@Atsushi_twi](https://twitter.com/Atsushi_twi)) has been of great help in developing of path planning algorithms.
 
 # Results
-<img src="Pics/Final Result.jpg" align="center" width="700"/>
+<img src="https://github.com/behroozmrd47/CS-5355-Path-Planning-Algorithms/blob/master/Final%20Result.jpg" align="center" width="700"/>
 
 Dijkstra returning the shortest possible path and A* slightly longer; whereas,
 sample-based algorithms such as RRT and PRM return longer paths. RRT converges faster by increasing the rate at which the goal is sampled; however, this would
 run the risk of getting stuck in a corner or a turn where the goal is just behind the obstacle, similar to the U-shaped maze. Compared to RRT, PRM was able to find a more economic path.
 
-<img src="Pics/Path Planning Pic.png" align="center" width="700"/>
+<img src="https://github.com/behroozmrd47/CS-5355-Path-Planning-Algorithms/blob/master/Path%20Planning%20Pic.png" align="center" width="700"/>
 
 Dynamic Window Approach (DWA) was also implanted capable of navigating collision free avoiding obstacles not existing on the initial occupancy grid.
 
