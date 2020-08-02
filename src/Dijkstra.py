@@ -1,9 +1,9 @@
-import AllConstants
+import src.AllConstants as Const
 import matplotlib.pyplot as plt
 import numpy as np
 from ordered_set import OrderedSet
-import Astar
-from AllConstants import dist
+import src.Astar as A_star
+from src.Utility_Func import dist
 
 
 class Node(object):
@@ -17,7 +17,7 @@ class Node(object):
     def __str__(self):
         return str(self.point) + "," + str(self.G)
 
-    def valuCalc(self, gridraw):
+    def value_calc(self, gridraw):
         x, y = self.point
         self.value = gridraw[x, y]
 
@@ -35,7 +35,7 @@ def children(node, grid):
     return links
 
 
-def dijkstra(start, goal, grid):
+def dijkstra(start, grid):
     # The open and closed sets
     openset = OrderedSet()
     closedset = OrderedSet()
@@ -87,56 +87,52 @@ def dijkstra(start, goal, grid):
     raise ValueError('No Path Found')
 
 
-def perfomrDijkstra(gridraw, startcord, goalcord):
-    gridNode = np.empty((len(gridraw), len(gridraw)), Node)
+def run_dijkstra(grid_raw, start_cord, goal_cord):
+    grid_node = np.empty((len(grid_raw), len(grid_raw)), Node)
 
-    start = Node(0, 0, startcord, 'start')
-    start.valuCalc(gridraw)
-    goal = Node(0, 0, goalcord, 'goal')
-    goal.valuCalc(gridraw)
+    start = Node(0, 0, start_cord, 'start')
+    start.value_calc(grid_raw)
+    goal = Node(0, 0, goal_cord, 'goal')
+    goal.value_calc(grid_raw)
     if start.value != 0 or goal.value != 0:
         raise Exception('Goal or start are in occupied cells')
 
-    for x in range(len(gridNode)):
-        for y in range(len(gridNode[0])):
-            gridNode[x, y] = Node(0, 0, (x, y))
-            gridNode[x, y].valuCalc(gridraw)
+    for x in range(len(grid_node)):
+        for y in range(len(grid_node[0])):
+            grid_node[x, y] = Node(0, 0, (x, y))
+            grid_node[x, y].value_calc(grid_raw)
 
-    gridNode[start.point[0], start.point[1]] = start
-    gridNode[goal.point[0], goal.point[1]] = goal
-    return dijkstra(start, goal, gridNode)
-
-
-start = AllConstants.start[0]
-start_State = AllConstants.start
-goal = AllConstants.goal[0]
-goal_State = AllConstants.goal
-
-importGrid = np.copy(Astar.obsScaleGrid)
-rRadios = AllConstants.RobotRadios
-plt.imshow(importGrid, cmap='hot', interpolation='nearest')
-# plt.show()
-obsScaleGrid = np.copy(Astar.obsScaleGrid)
-plt.imshow(obsScaleGrid, cmap='hot', interpolation='nearest')
-# plt.show()
-importGrid = np.copy(obsScaleGrid)
+    grid_node[start.point[0], start.point[1]] = start
+    grid_node[goal.point[0], goal.point[1]] = goal
+    return dijkstra(start, grid_node)
 
 
-path = list()
-path = perfomrDijkstra(obsScaleGrid, start, goal)
+def perform_dijkstra(grid_raw, start_state=Const.start_state, goal_state=Const.goal_state):
+    start_cord = start_state[0]
+    goal_cord = goal_state[0]
 
-for node in path:
-    x, y = node.point
-    importGrid[x - 3:x + 4, y - 3:y + 4] = 0.4
-importGrid[start[0] - 5:start[0] + 6, start[1] - 5:start[1] + 6] = 0.6
-importGrid[goal[0] - 5:goal[0] + 6, goal[1] - 5:goal[1] + 6] = 0.2
+    importGrid = np.copy(A_star.obsScaleGrid)
+    rRadios = Const.ROBOT_RADIUS
+    plt.imshow(importGrid, cmap='hot', interpolation='nearest')
+    obsScaleGrid = np.copy(A_star.obsScaleGrid)
+    plt.imshow(obsScaleGrid, cmap='hot', interpolation='nearest')
+    importGrid = np.copy(obsScaleGrid)
 
-plt.imshow(importGrid[:, ::-1].transpose(), cmap='hot', interpolation='nearest')
-plt.show()
+    path = run_dijkstra(obsScaleGrid, start_cord, goal_cord)
 
-total = 0
-for i in range(len(path) - 1):
-    total = total + dist(path[i].point, path[i + 1].point)
-print total
+    for node in path:
+        x, y = node.point
+        importGrid[x - 3:x + 4, y - 3:y + 4] = 0.4
+    importGrid[start_cord[0] - 5:start_cord[0] + 6, start_cord[1] - 5:start_cord[1] + 6] = 0.6
+    importGrid[goal_cord[0] - 5:goal_cord[0] + 6, goal_cord[1] - 5:goal_cord[1] + 6] = 0.2
 
-print("END Dijkstra")
+    plt.imshow(importGrid[:, ::-1].transpose(), cmap='hot', interpolation='nearest')
+    plt.show()
+
+    total = 0
+    for i in range(len(path) - 1):
+        total = total + dist(path[i].point, path[i + 1].point)
+    print
+    total
+
+    print("END Dijkstra")
